@@ -19,7 +19,7 @@ module StockTip
 
     def dividend_info(stock_symbol)
       fields = [SYMBOL,EX_DIVIDEND_DATE,DIVIDEND_PER_SHARE]
-      p data = get_stock(fields, stock_symbol)
+      data = get_stock(fields, stock_symbol)
       cents = (data[stock_symbol][DIVIDEND_PER_SHARE].to_f * 100).to_i
       date = Date.parse(data[stock_symbol][EX_DIVIDEND_DATE])
       return { DIVIDEND_PER_SHARE => cents/4, 
