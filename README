@@ -3,7 +3,34 @@ offers advice to maximize dividend returns, based on a list of stocks, and the
 current value of those stocks, taking into account the buy/sell fees, the 
 current value of the stock, and the ex-dividend date.
 
-For example, if a stock has increased in value, such that selling it would
-yield more than the quarterly dividend, and another stock has a closer 
-dividend date, it could recommend selling the stock, and purchasing the
-other stock, so that more cash is generated short term.
+to analyze a given stock portfolio, this program requires a list of stocks you 
+are interested in, the stocks you own, their purchase date, and the 
+amount you paid.  Additionally, it will need to know the fees your brokerage
+charges.
+
+Based on this, it will make recommendations on when to sell stocks, based on
+criteria designed to maximize dividends.
+
+I plan on implementing three analytics for this program.  They are subject to
+change, if I decide that they are too much work :)
+
+1.  If a stock as increased to the point where selling it now results in
+a net gain greater than the dividends that will be paid out over the next 
+12 months, after subtracting the brokerage fees, the program will recommend
+selling the stock.
+
+2.  If an unowned stock on the watch list has an ex-dividend date that is closer 
+than an owned stock, and switching from that stock, and then back again in time
+to catch the ex-dividend date of the original stock, results in an overall gain,
+the program will recommend doing so.  This is complicated, in
+that it has to take into account brokerage fees for all the transactions
+involved and the current value of each stock.
+
+3.  If a stock increases in value such that it results in a 10% profit within 
+90 days of purchasing, the program will recommend that the original money 
+should be pulled out, leaving shares equating to that profit behind, under the
+theory that 10% gain in less than 90 days is probably temporary, and this stock
+can now be left alone to generate dividends on the gains from now on. 
+
+*** rule 3 may conflict with rule 1.  I'm not sure.  I'll decide on precedence
+later ***
