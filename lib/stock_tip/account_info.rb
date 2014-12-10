@@ -11,7 +11,7 @@ module StockTip
 
     attr_reader :config_file
 
-    def exists?
+    def account_exists?
       File.exists?(@config_file)
     end
 
