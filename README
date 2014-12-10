@@ -1,0 +1,9 @@
+This program uses the Yahoo Finance api to pull information about a stock, and
+offers advice to maximize dividend returns, based on a list of stocks, and the 
+current value of those stocks, taking into account the buy/sell fees, the 
+current value of the stock, and the ex-dividend date.
+
+For example, if a stock has increased in value, such that selling it would
+yield more than the quarterly dividend, and another stock has a closer 
+dividend date, it could recommend selling the stock, and purchasing the
+other stock, so that more cash is generated short term.
