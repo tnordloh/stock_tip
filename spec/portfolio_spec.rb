@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative '../lib/config/portfolio'
+require_relative '../lib/stock_tip/config/portfolio'
 
 describe StockTip::Portfolio do
   it "checks if a portfolio exists" do

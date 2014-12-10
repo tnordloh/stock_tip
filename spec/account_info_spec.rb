@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative '../lib/account_info/account_info'
+require_relative '../lib/stock_tip/config/account_info'
 
 describe StockTip::AccountInfo do
   it "checks if your broker information exists already" do
