@@ -1,6 +1,6 @@
 require "minitest/autorun"
 
-require_relative "../lib/stock_info"
+require_relative "../lib/stock_tip/stock_info"
 
 describe "StockTip::StockInfo" do
   
