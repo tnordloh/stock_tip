@@ -30,7 +30,8 @@ involved and the current value of each stock.
 90 days of purchasing, the program will recommend that the original money 
 should be pulled out, leaving shares equating to that profit behind, under the
 theory that 10% gain in less than 90 days is probably temporary, and this stock
-can now be left alone to generate dividends on the gains from now on. 
+can now be left alone to generate dividends on that 10% gain from now on, while
+protecting the original balance of cash.
 
 *** rule 3 may conflict with rule 1.  I'm not sure.  I'll decide on precedence
 later ***
