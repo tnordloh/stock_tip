@@ -14,10 +14,13 @@ criteria designed to maximize dividends.
 I plan on implementing three analytics for this program.  They are subject to
 change, if I decide that they are too much work :)
 
-1.  If a stock as increased to the point where selling it now results in
+1.  If a stock has increased to the point where selling it now results in
 a net gain greater than the dividends that will be paid out over the next 
 12 months, after subtracting the brokerage fees, the program will recommend
-selling the stock.
+selling the stock, and buying something else on the watch list, if there is 
+anything on that list that's decreased in value over the period of time that 
+the first stock was owned.
+
 
 2.  If an unowned stock on the watch list has an ex-dividend date that is closer 
 than an owned stock, and switching from that stock, and then back again in time
