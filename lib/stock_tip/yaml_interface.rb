@@ -10,18 +10,18 @@ module StockTip
 
     attr_reader :config_file
 
-    def account_exists?
+    def exists?
       File.exists?(@config_file)
     end
 
     def read_config_file
-      unless account_exists?
+      unless exists?
         raise "file #{config_file} nonexistent.  use create_account to create"
       end
       @account_info = YAML.load_file(@config_file)
     end
 
-    def create_account(account: { :test => "test_value" } )
+    def create(account: { :test => "test_value" } )
       File.open(@config_file, "w") {|f| f.write account.to_yaml } 
     end
 
