@@ -6,7 +6,7 @@ describe "StockTip::StockInfo" do
   
   it "gets the price of a stock" do
     stock_info = StockTip::StockInfo.new()
-    stock_info.price("MCD").must_be_within_delta(100,45)
+    stock_info.price("MCD").must_be_within_delta(9062,45_00)
   end
 
   it "gets the dividend information of a stock" do

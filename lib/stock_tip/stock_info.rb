@@ -4,6 +4,8 @@ module StockTip
     require 'csv'
     require 'date'
 
+    require_relative '../stock_tip'
+
     BASE_URL= "http://finance.yahoo.com/d/quotes.csv?s="
     ASK="l1"
     DIVIDEND_PER_SHARE="d"
@@ -14,7 +16,8 @@ module StockTip
 
     def price(stock_symbol)
       stock = get_stock([SYMBOL,ASK], stock_symbol)
-      stock[stock_symbol][ASK].to_f
+      dollar_value = stock[stock_symbol][ASK].to_f
+      StockTip.dollars_to_cents(dollar_value)
     end
 
     def dividend_info(stock_symbol)
