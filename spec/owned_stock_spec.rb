@@ -22,12 +22,13 @@ describe StockTip::OwnedStock do
   end
 
   it "can get a stock's current sell value" do
-    puts "sell value:"
-    p stock.sell_value
+    calculator = lambda  { |symbol| 100_00 }
+    stock.sell_value(calculator).must_equal(100_00 * 100 - 999)
   end
 
   it "can get a stock's current value" do
-    p stock.current_price.must_be_within_delta(9062, 4500)
+    calculator = lambda  { |symbol| 100 }
+    stock.current_price(calculator).must_equal(100) 
   end
   
 end

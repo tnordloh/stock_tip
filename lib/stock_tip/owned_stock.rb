@@ -3,7 +3,6 @@ module StockTip
   require 'date'
 
   require_relative '../stock_tip'
-  require_relative './stock_info'
 
   class OwnedStock
     def initialize(symbol,price_per_share,shares,broker_fee,purchase_date)
@@ -22,13 +21,12 @@ module StockTip
     end
 
 
-    def sell_value()
-      value = current_price * @shares - @broker_fee
+    def sell_value(calculator)
+      current_price(calculator) * @shares - @broker_fee
     end
 
-    def current_price()
-      info = StockTip::StockInfo.new
-      info.price(@symbol)
+    def current_price(calculator)
+      calculator.call(@symbol) 
     end
 
     def self.sum( *owned_stocks, this_method: :total_purchase_price )
