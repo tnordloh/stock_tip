@@ -12,5 +12,5 @@ unless account.exists?
   account_info[:sell_fee] = ask("sell fee?")
   account_info[:buy_fee] = ask("buy fee?")
   puts "creating account"
-  account.create
+  account.create(account: account_info)
 end
