@@ -13,7 +13,8 @@ module StockTip
       @purchase_date   = Date.parse(purchase_date)
     end
 
-    attr_reader :shares, :symbol, :purchase_date, :broker_fee
+    attr_reader :shares, :symbol, :purchase_date, :broker_fee, 
+                :price_per_share
 
 
     def total_purchase_price
