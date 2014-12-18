@@ -10,7 +10,7 @@ describe StockTip::AccountInfo do
   
   it "creates a new account" do
     account = StockTip::AccountInfo.new("./data/test")
-    account.create_account(account: { :name => "Ameritrade", 
+    account.create(info: { :name => "Ameritrade", 
                                   :buy_fee => 999,
                                   :sell_fee => 1002 } )
     account.exists?.must_equal(true)
