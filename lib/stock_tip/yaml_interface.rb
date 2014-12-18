@@ -28,8 +28,7 @@ module StockTip
     end
 
     def create(info: @info )
-      puts @directory
-      FileUtils::mkdir_p @directory 
+      FileUtils::mkdir_p @directory unless Dir.exists?(@directory)
       File.open(@config_file, "w") {|f| f.write info.to_yaml } 
     end
 

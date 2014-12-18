@@ -16,8 +16,10 @@ module StockTip
 
     def price(stock_symbol)
       stock = get_stock([SYMBOL,ASK], stock_symbol)
-      dollar_value = stock[stock_symbol][ASK].to_f
-      StockTip.dollars_to_cents(dollar_value)
+      return nil if stock["Missing Symbols List."] 
+      return nil if stock[stock_symbol] == nil
+      dollar_value = stock[stock_symbol][ASK].to_f 
+      StockTip.dollars_to_cents(dollar_value) 
     end
 
     def dividend_info(stock_symbol)

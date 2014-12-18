@@ -6,6 +6,7 @@ require_relative '../lib/stock_tip/yaml_interface/portfolio'
 require_relative '../lib/stock_tip/cli/menu'
 default_directory = ARGV[0] ||"./data/current"
 
+menu = StockTip::CLI::Menu.new
 account = StockTip::AccountInfo.new(default_directory)
 account_info = {}
 unless account.exists?
@@ -24,7 +25,7 @@ portfolio.load_account(account)
 unless portfolio.exists?
   puts "I don't see a portfolio in #{default_directory}, let me prompt you "+
     "to create one"
-  StockTip::CLI.add_stock(portfolio)
+  menu.add_stock(portfolio)
 end
 portfolio.read_config_file
 summary = lambda do
@@ -49,6 +50,6 @@ list = lambda do
   say "are particular to <%= color('their', BOLD) %> needs"
 end
 
-StockTip::CLI.main_menu(list: list, summary: summary, portfolio: portfolio)
+menu.main_menu(list: list, summary: summary, portfolio: portfolio)
 
 
