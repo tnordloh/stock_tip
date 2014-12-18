@@ -42,6 +42,11 @@ summary = lambda do
   }
 end
 
-StockTip::CLI.main_menu(summary: summary, portfolio: portfolio)
+list = lambda do 
+  say "this will one day allow the user to list features of a stock that"
+  say "are particular to <%= color('their', BOLD) %> needs"
+end
+
+StockTip::CLI.main_menu(list: list, summary: summary, portfolio: portfolio)
 
 
