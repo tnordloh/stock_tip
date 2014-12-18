@@ -10,13 +10,14 @@ describe StockTip::YamlInterface do
   
   it "creates a new account" do
     account = StockTip::YamlInterface.new("./data/test","test.yaml")
-    account.create(account: { :name => "Ameritrade", 
+    account.create(info: { :name => "Ameritrade", 
                                   :buy_fee => 999,
                                   :sell_fee => 1002 } )
     account.exists?.must_equal(true)
     account2 = StockTip::YamlInterface.new("./data/test","test.yaml")
     x = account2.read_config_file
     x[:name].must_equal("Ameritrade")
+    account2.name.must_equal("Ameritrade")
     File.delete(account.config_file)
   end
 end

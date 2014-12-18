@@ -5,24 +5,28 @@ module StockTip
 
     def initialize(directory,file)
       @config_file = "#{directory}/#{file}"
-      @account_info = nil
+      @info = { :test => "test_value"}
     end
 
-    attr_reader :config_file
+    attr_reader :config_file, :info
 
     def exists?
       File.exists?(@config_file)
+    end
+
+    def method_missing(method, *args)
+      return @info[method] || super
     end
 
     def read_config_file
       unless exists?
         raise "file #{config_file} nonexistent.  use create_account to create"
       end
-      @account_info = YAML.load_file(@config_file)
+      @info = YAML.load_file(@config_file)
     end
 
-    def create(account: { :test => "test_value" } )
-      File.open(@config_file, "w") {|f| f.write account.to_yaml } 
+    def create(info: @info )
+      File.open(@config_file, "w") {|f| f.write info.to_yaml } 
     end
 
   end
