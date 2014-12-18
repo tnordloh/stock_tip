@@ -17,11 +17,9 @@ module StockTip
     attr_reader :shares, :symbol, :purchase_date, :broker_fee, 
                 :price_per_share
 
-
     def total_purchase_price
       @price_per_share * @shares + @broker_fee
     end
-
 
     def sell_value()
       current_price * @shares - @broker_fee
@@ -38,14 +36,22 @@ module StockTip
     def to_a
       [symbol,shares,price_per_share,total_purchase_price,current_price]
     end
+
+    def owned_period
+      (Date.today - @purchase_date).to_i
+    end
+
     def to_s(spacer = 14)
       printme = [symbol,
         shares,
         StockTip.cents_to_dollars(price_per_share),
+        StockTip.cents_to_dollars(@broker_fee),
         StockTip.cents_to_dollars(total_purchase_price),
-        StockTip.cents_to_dollars(current_price)
+        StockTip.cents_to_dollars(sell_value),
+        StockTip.cents_to_dollars(current_price),
       ]
       printme.map { |x| x.to_s.ljust(spacer)}.join("|")
     end
+
   end
 end

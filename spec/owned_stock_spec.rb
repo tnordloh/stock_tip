@@ -33,8 +33,14 @@ describe StockTip::OwnedStock do
   it "can get turn a stock into an array" do
     stock.to_a[0].must_equal("MCD")
   end
+
   it "can get turn a stock into a string" do
-    p stock.to_s.index("MCD").must_equal(0)
+    stock.to_s.index("MCD").must_equal(0)
   end
   
+  it "can determine how many days a stock has been owned" do
+    date = Date.today - 1
+    stock = StockTip::OwnedStock.new("MCD",100.00,100,9.99,date.to_s)
+    stock.owned_period.must_equal(1)
+  end
 end

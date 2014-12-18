@@ -38,13 +38,16 @@ module StockTip
       symbol = ask("stock symbol?")
       price_per_share = ask("price per share?")
       buy_fee = ask("buy fee? [#{portfolio.account_info[:buy_fee]}]")
-      buy_fee = portfolio.account_info.buy_fee  unless buy_fee.to_s.respond_to?(:to_f)
+      p buy_fee
+      p buy_fee.to_s.respond_to?(:to_f)
+      buy_fee = portfolio.account_info[:buy_fee]  unless (buy_fee.to_f > 0.0)
+      p buy_fee
       shares = ask("number of shares?")
       purchase_date = ask("purchase date?")
       portfolio.add_stock(symbol,
                           price_per_share.to_f,
                           shares.to_i,
-                          buy_fee.to_i,
+                          buy_fee.to_f,
                           purchase_date)
       portfolio.create
     end

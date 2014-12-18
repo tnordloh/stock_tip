@@ -5,7 +5,6 @@ require_relative '../lib/stock_tip/yaml_interface/account_info'
 require_relative '../lib/stock_tip/yaml_interface/portfolio'
 require_relative '../lib/stock_tip/cli/menu'
 default_directory = ARGV[0] ||"./data/current"
-
 account = StockTip::AccountInfo.new(default_directory)
 account_info = {}
 unless account.exists?
@@ -30,9 +29,7 @@ portfolio.read_config_file
 summary = lambda do
   stocks = portfolio.info
   column_width=14
-
-  columns = %w[symbol shares price/share broker_fee total_price sell_value 
-               current_price ]
+  columns = %w[symbol shares purchase_price value sell_value current_price]
   header = columns.map { |c| c.to_s.ljust(column_width) }.join('|')
   spacer = "#{"-" * (columns.size * column_width + columns.size)}"
   say spacer
@@ -44,11 +41,6 @@ summary = lambda do
   }
 end
 
-list = lambda do 
-  say "this will one day allow the user to list features of a stock that"
-  say "are particular to <%= color('their', BOLD) %> needs"
-end
-
-StockTip::CLI.main_menu(list: list, summary: summary, portfolio: portfolio)
+StockTip::CLI.main_menu(summary: summary, portfolio: portfolio)
 
 

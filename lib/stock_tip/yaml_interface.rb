@@ -2,8 +2,10 @@ module StockTip
   class YamlInterface
     
     require 'yaml'
+    require 'fileutils'
 
     def initialize(directory,file)
+      @directory = directory
       @config_file = "#{directory}/#{file}"
       @info = { :test => "test_value"}
     end
@@ -26,6 +28,8 @@ module StockTip
     end
 
     def create(info: @info )
+      puts @directory
+      FileUtils::mkdir_p @directory 
       File.open(@config_file, "w") {|f| f.write info.to_yaml } 
     end
 

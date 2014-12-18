@@ -11,7 +11,6 @@ module StockTip
       @info = []
       @account_info = nil
       @stock_info = StockTip::StockInfo.new()
-      @stock_price = lambda { |symbol| @stock_info.price(symbol)}
     end
     
     attr_reader :account_info
