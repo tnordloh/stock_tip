@@ -26,7 +26,7 @@ module StockTip
     end
 
     def sell_value
-      StockTip::OwnedStock.sum(*@portfolio, this_method: :sell_value )
+      StockTip::OwnedStock.sum(*@info, this_method: :sell_value )
     end
 
   end
