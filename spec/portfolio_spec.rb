@@ -13,7 +13,7 @@ describe StockTip::Portfolio do
   
   it "creates a new portfolio" do
     portfolio = StockTip::Portfolio.new("./data/test")
-    portfolio.create(info: { :name => "Ameritrade", 
+    portfolio.write(info: { :name => "Ameritrade", 
                                   :buy_fee => 999,
                                   :sell_fee => 1002 } )
     portfolio.exists?.must_equal(true)
@@ -25,7 +25,7 @@ describe StockTip::Portfolio do
 
   it "adds multiple entries to the portfolio" do
     account = StockTip::AccountInfo.new("./data/test")
-    account.create(info: { :name => "Ameritrade", 
+    account.write(info: { :name => "Ameritrade", 
                                   :buy_fee => 999,
                                   :sell_fee => 1002 } )
     portfolio = StockTip::Portfolio.new("./data/test")

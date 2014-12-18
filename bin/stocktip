@@ -16,7 +16,7 @@ unless account.exists?
   account_info[:sell_fee] = ask("sell fee?")
   account_info[:buy_fee] = ask("buy fee?")
   puts "creating account"
-  account.create(info: account_info)
+  account.write(info: account_info)
 end
 account.read_config_file
 p account_info = account.info

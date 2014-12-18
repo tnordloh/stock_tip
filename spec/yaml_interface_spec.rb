@@ -10,7 +10,7 @@ describe StockTip::YamlInterface do
   
   it "creates a new account" do
     account = StockTip::YamlInterface.new("./data/test","test.yaml")
-    account.create(info: { :name => "Ameritrade", 
+    account.write(info: { :name => "Ameritrade", 
                                   :buy_fee => 999,
                                   :sell_fee => 1002 } )
     account.exists?.must_equal(true)
