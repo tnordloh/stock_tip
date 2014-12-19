@@ -10,7 +10,7 @@ module StockTip
       @info = { :test => "test_value"}
     end
 
-    attr_reader :config_file, :info
+    attr_reader :config_file, :info, :directory
 
     def exists?
       File.exists?(@config_file)

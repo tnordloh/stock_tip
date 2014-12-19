@@ -4,13 +4,14 @@ module StockTip
   require_relative '../stock_info'
 
   module CLI
+    TEST = lambda { say "howdy" }
     class Menu
       def initialize()
         @stock_info = StockTip::StockInfo.new()
       end
       def main_menu(list: TEST , summary: TEST, 
-                    portfolio: nil)
-        choices = %w{list summary quit add_stock}
+                    portfolio: nil, watchlist: nil)
+        choices = %w{watchlist summary quit add_stock}
         quit = false
         while quit == false
           choose do |menu|
@@ -18,11 +19,13 @@ module StockTip
             menu.index        = :letter
             menu.index_suffix = ") "
             menu.prompt       = "choice:"
-            menu.choice :list do
-              list.call 
+            menu.choice :watchlist do 
+              watch_list(watchlist); 
+              puts "press enter to continue"
+              gets 
             end
             menu.choice :summary do 
-              summary.call; 
+              summary(portfolio)
               puts "press enter to continue"
               gets 
             end
@@ -54,7 +57,7 @@ module StockTip
                             shares.to_i,
                             buy_fee.to_f,
                             purchase_date)
-        portfolio.create
+        portfolio.write
       end
 
       def get_date
@@ -78,6 +81,41 @@ module StockTip
           symbol = nil
         end
       end
+
+      def create_account(account)
+        account_info = {}
+        account_info[:broker]   = ask("broker name?")
+        account_info[:sell_fee] = ask("sell fee?")
+        account_info[:buy_fee]  = ask("buy fee?")
+        puts "creating account"
+        account.write(info: account_info)
+      end
+
+      def summary(portfolio)
+        stocks = portfolio.info
+        column_width=14
+        columns = %w[symbol shares price/share broker_fee total_price sell_value 
+               current_price ]
+        header = columns.map { |c| c.to_s.ljust(column_width) }.join('|')
+        spacer = "#{"-" * (columns.size * column_width + columns.size)}"
+        say spacer
+        say "#{header}\n"
+        say spacer
+        stocks.each do |stock|
+          printme = stock.to_s(column_width)
+          say "#{printme}\n"
+        end
+      end
+
+      def watch_list(watchlist)
+        symbol = ""
+        until (symbol =~ /quit|q!/i )
+          say watchlist.to_s
+          symbol = ask "symbol? (enter 'quit' or q! when done)"
+          watchlist.add(symbol.to_s)
+        end
+      end
+
     end
   end
 end

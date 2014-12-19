@@ -37,7 +37,7 @@ module StockTip
       query = BASE_URL + name + DIVIDER + parsed_rows + TAIL
       csv_data = open(query) { |line| CSV.parse(line.read) }       
       csv_data.inject({}) do |accumulator,line|
-        accumulator[line[0]] = rows[1..-1].zip(line[1..-1]).to_h 
+        accumulator[line[0]] = rows.zip(line).to_h 
         accumulator
       end
     end

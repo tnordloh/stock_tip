@@ -1,5 +1,5 @@
 module StockTip
-  require_relative '../yaml_interface'
+  require_relative './yaml_interface'
   class AccountInfo < StockTip::YamlInterface
     
     ACCOUNT_FILE="account.yaml"

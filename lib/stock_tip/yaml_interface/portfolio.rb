@@ -1,5 +1,5 @@
 module StockTip
-  require_relative '../yaml_interface'
+  require_relative './yaml_interface'
   require_relative '../owned_stock'
   require_relative '../stock_info'
   class Portfolio < StockTip::YamlInterface

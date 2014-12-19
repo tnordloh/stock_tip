@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative '../lib/stock_tip/yaml_interface'
+require_relative '../lib/stock_tip/yaml_interface/yaml_interface'
 
 describe StockTip::YamlInterface do
   it "checks if your broker information exists already" do

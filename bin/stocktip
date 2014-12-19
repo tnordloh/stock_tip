@@ -1,33 +1,32 @@
 #!/usr/bin/env ruby
 #
 require 'highline/import'
-require_relative '../lib/stock_tip/yaml_interface/account_info'
-require_relative '../lib/stock_tip/yaml_interface/portfolio'
+require_relative '../lib/yaml_interface'
 require_relative '../lib/stock_tip/cli/menu'
 default_directory = ARGV[0] ||"./data/current"
 
 menu = StockTip::CLI::Menu.new
 account = StockTip::AccountInfo.new(default_directory)
-account_info = {}
 unless account.exists?
   puts "I don't see an account in #{default_directory}, let me prompt you "+
     "to create one"
-  account_info[:broker] = ask("broker name?")
-  account_info[:sell_fee] = ask("sell fee?")
-  account_info[:buy_fee] = ask("buy fee?")
-  puts "creating account"
-  account.write(info: account_info)
+  menu.create_account(account)
 end
+
 account.read_config_file
-p account_info = account.info
+
 portfolio = StockTip::Portfolio.new(default_directory)
 portfolio.load_account(account)
+
 unless portfolio.exists?
   puts "I don't see a portfolio in #{default_directory}, let me prompt you "+
     "to create one"
   menu.add_stock(portfolio)
+else
+  portfolio.read_config_file
 end
-portfolio.read_config_file
+
+
 summary = lambda do
   stocks = portfolio.info
   column_width=14
@@ -50,6 +49,9 @@ list = lambda do
   say "are particular to <%= color('their', BOLD) %> needs"
 end
 
-menu.main_menu(list: list, summary: summary, portfolio: portfolio)
+watchlist = StockTip::WatchList.new(default_directory)
+
+menu.main_menu(list: list, summary: summary, portfolio: portfolio, 
+               watchlist: watchlist)
 
 
