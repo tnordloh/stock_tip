@@ -1,13 +1,13 @@
 module StockTip
 
   require 'highline/import'
-  require_relative '../stock_info'
+  require_relative '../../yfapi/stock_info'
 
   module CLI
     TEST = lambda { say "howdy" }
     class Menu
       def initialize()
-        @stock_info = StockTip::StockInfo.new()
+        @stock_info = YFAPI::StockInfo.new()
       end
       def main_menu(list: TEST , summary: TEST, 
                     portfolio: nil, watchlist: nil)
