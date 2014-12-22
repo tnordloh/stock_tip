@@ -2,16 +2,17 @@ module StockTip
 
   require 'date'
 
-  require_relative '../stock_tip'
+  require_relative '../yfapi/stock_info'
+  require_relative '../yfapi/constants'
 
   class OwnedStock
     def initialize(symbol,price_per_share,shares,broker_fee,purchase_date)
       @symbol          = symbol
-      @price_per_share = StockTip.dollars_to_cents(price_per_share)
+      @price_per_share = YFAPI.dollars_to_cents(price_per_share)
       @shares          = shares
-      @broker_fee      = StockTip.dollars_to_cents(broker_fee)
+      @broker_fee      = YFAPI.dollars_to_cents(broker_fee)
       @purchase_date   = Date.parse(purchase_date)
-      @stock_info      = StockTip::StockInfo.new()
+      @stock_info      = YFAPI::StockInfo.new()
     end
 
     attr_reader :shares, :symbol, :purchase_date, :broker_fee, 
@@ -44,11 +45,11 @@ module StockTip
     def to_s(spacer = 14)
       printme = [symbol,
         shares,
-        StockTip.cents_to_dollars(price_per_share),
-        StockTip.cents_to_dollars(@broker_fee),
-        StockTip.cents_to_dollars(total_purchase_price),
-        StockTip.cents_to_dollars(sell_value),
-        StockTip.cents_to_dollars(current_price),
+        YFAPI.cents_to_dollars(price_per_share),
+        YFAPI.cents_to_dollars(@broker_fee),
+        YFAPI.cents_to_dollars(total_purchase_price),
+        YFAPI.cents_to_dollars(sell_value),
+        YFAPI.cents_to_dollars(current_price),
       ]
       printme.map { |x| x.to_s.ljust(spacer)}.join("|")
     end

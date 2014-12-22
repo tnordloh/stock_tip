@@ -21,8 +21,6 @@ module StockTip
             menu.prompt       = "choice:"
             menu.choice :watchlist do 
               watch_list(watchlist); 
-              puts "press enter to continue"
-              gets 
             end
             menu.choice :summary do 
               summary(portfolio)
@@ -109,6 +107,7 @@ module StockTip
 
       def watch_list(watchlist)
         symbol = ""
+        watchlist.read_config_file
         until (symbol =~ /quit|q!/i )
           say watchlist.to_s
           symbol = ask "symbol? (enter 'quit' or q! when done)"

@@ -1,7 +1,7 @@
 module StockTip
   require_relative './yaml_interface'
   require_relative '../owned_stock'
-  require_relative '../stock_info'
+  require_relative '../../yfapi/stock_info'
   class Portfolio < StockTip::YamlInterface
     
 
@@ -10,7 +10,7 @@ module StockTip
       super(directory,PORTFOLIO_FILE)
       @info = []
       @account_info = nil
-      @stock_info = StockTip::StockInfo.new()
+      @stock_info = YFAPI::StockInfo.new()
     end
     
     attr_reader :account_info

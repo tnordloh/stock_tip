@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 
 require_relative '../lib/stock_tip/owned_stock'
-require_relative '../lib/stock_tip/stock_info'
+#require_relative '../lib/stock_tip/stock_info'
 
 describe StockTip::OwnedStock do
   let(:stock) { StockTip::OwnedStock.new("MCD",100.00,100,9.99,"2014-9-9") }

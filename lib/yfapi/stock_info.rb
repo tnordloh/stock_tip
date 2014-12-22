@@ -1,10 +1,10 @@
-module StockTip
+module YFAPI
   class StockInfo
     require 'open-uri'
     require 'csv'
     require 'date'
 
-    require_relative '../stock_tip'
+    require_relative './constants'
 
     BASE_URL= "http://finance.yahoo.com/d/quotes.csv?s="
     ASK="l1"
@@ -15,11 +15,16 @@ module StockTip
     TAIL = "&e=.csv"
 
     def price(stock_symbol)
-      stock = get_stock([SYMBOL,ASK], stock_symbol)
+      symbol = YFAPI::SYMBOL_INFO[:symbol]
+      price = YFAPI::AVERAGES[:last_trade_price_only]
+      price_fields = [symbol,
+                      price
+                     ]
+      stock = get_stock(price_fields, stock_symbol)
       return nil if stock["Missing Symbols List."] 
       return nil if stock[stock_symbol] == nil
-      dollar_value = stock[stock_symbol][ASK].to_f 
-      StockTip.dollars_to_cents(dollar_value) 
+      dollar_value = stock[stock_symbol][price].to_f 
+      YFAPI.dollars_to_cents(dollar_value) 
     end
 
     def dividend_info(stock_symbol)
