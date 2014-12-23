@@ -2,8 +2,8 @@ module StockTip
 
   require 'date'
 
-  require_relative '../yfapi/stock_info'
-  require_relative '../yfapi/constants'
+  require_relative '../yfapi'
+  require_relative '../yfapi'
 
   class OwnedStock
     def initialize(symbol,price_per_share,shares,broker_fee,purchase_date)

@@ -1,15 +1,17 @@
 module StockTip
-  require_relative './yaml_interface'
+  require_relative 'yaml_interface'
   require_relative '../../yfapi/stock_info'
   require_relative '../../yfapi/constants'
   class WatchList < StockTip::YamlInterface
     
 
     WATCHLIST_FILE="watchlist.yaml"
+    WATCHLIST_FORMAT="watchlist_format.yaml"
     def initialize(directory)
       super(directory,WATCHLIST_FILE)
       @info = []
       @stock_info = YFAPI::StockInfo.new()
+      @header = StockTip::WatchListFormat.new(directory)
     end
     
     attr_reader :info

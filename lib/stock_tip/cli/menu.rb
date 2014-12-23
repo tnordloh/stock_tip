@@ -110,9 +110,20 @@ module StockTip
         watchlist.read_config_file
         until (symbol =~ /quit|q!/i )
           say watchlist.to_s
-          symbol = ask "symbol? (enter 'quit' or q! when done)"
-          watchlist.add(symbol.to_s)
+          say "actions:"
+          say "[a symbol] to add a symbol to the watchlist"
+          say "[d symbol] to delete a symbol"
+          say "[r] to refresh"
+          say "[q!] or [quit]] to quit to previous menu"
+          symbol = ask "actions?"
+          command,option = symbol.split(/\s+/)
+          watchlist.add(option.to_s) if command == "a"
+          watchlist.delete(option.to_s) if command == "d"
+          next if command == "r"
         end
+      end
+
+      def edit_fields(watchlist)
       end
 
     end
