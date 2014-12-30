@@ -10,13 +10,13 @@ module StockTip
     end
 
     def categories
-      list = {}
-      YFAPI.constants.each {|constant|
-        x =  instance_eval "YFAPI::#{constant}"
-        next unless x.is_a?(Hash)
-        list[constant]  = x
-      }
-      list
+      #list = []
+      #YFAPI.constants.each {|constant|
+      #  x =  instance_eval "YFAPI::#{constant}"
+      #  next unless x.is_a?(Hash)
+      #  list << x
+      #}
+      YFAPI::CATEGORIES.keys.map {|key| key }
     end
 
   end

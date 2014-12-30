@@ -114,9 +114,11 @@ module StockTip
           say "[a symbol] to add a symbol to the watchlist"
           say "[d symbol] to delete a symbol"
           say "[r] to refresh"
+          say "[f] to edit fields displayed"
           say "[q!] or [quit]] to quit to previous menu"
           symbol = ask "actions?"
           command,option = symbol.split(/\s+/)
+          edit_fields(watchlist) if command == "f"
           watchlist.add(option.to_s) if command == "a"
           watchlist.delete(option.to_s) if command == "d"
           next if command == "r"
@@ -124,6 +126,8 @@ module StockTip
       end
 
       def edit_fields(watchlist)
+        wlf = watchlist.wlf
+        p wlf.categories
       end
 
     end

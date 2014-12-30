@@ -20,4 +20,11 @@ describe StockTip::WatchList do
     watch_list.add("GE")
     watch_list.to_s[1,1].must_equal("|")
   end
+
+  it "calculates the best deal in a watchlist" do
+    watch_list = StockTip::WatchList.new('./data/test')
+    watch_list.add("MCD")
+    watch_list.add("GE")
+    p watch_list.best_deal 
+  end
 end

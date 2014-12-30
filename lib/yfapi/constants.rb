@@ -7,7 +7,7 @@ module YFAPI
   def self.dollars_to_cents(dollars)
     (dollars.round(2)*100).to_i
   end
-
+  CATEGORIES = {}
   PRICING = {
     ask:                        'a',
     bid:                        'b',
@@ -17,12 +17,16 @@ module YFAPI
     open:                       'o'
   }
 
+  CATEGORIES[:PRICING] = PRICING
+
   DIVIDENDS = {
     dividend_yield:             'y',
     dividend_per_share:         'd',
     dividend_pay_date:          'r1',
     ex_dividend_date:           'q'
   }
+
+  CATEGORIES[:DIVIDENDS] = DIVIDENDS
 
   DATE = {
     change:                     'c1',
@@ -34,6 +38,8 @@ module YFAPI
     trade_date:                 'd2',
     last_trade_time:            't1'
   }
+
+  CATEGORIES[:DATE] = DATE 
 
   AVERAGES = {
     after_hours_change:                          "c8",
@@ -52,6 +58,8 @@ module YFAPI
     two_hundred_day_moving_avg:                  'm7'
   }
 
+  CATEGORIES[:AVERAGES] = AVERAGES 
+
   FIFTY_TWO_WEEK_PRICING = {
     fifty_two_week_high:                       'k',
     fifty_two_week_low:                        'j',
@@ -61,6 +69,8 @@ module YFAPI
     percent_change_from_fifty_two_week_high:   'k5',
     fifty_two_week_range:                      'w'
   }
+
+  CATEGORIES[:FIFTY_TWO_WEEK_PRICING] = FIFTY_TWO_WEEK_PRICING 
 
   SYMBOL_INFO = {
     more_info:              'v',
@@ -75,6 +85,8 @@ module YFAPI
     shares_outstanding:     'j2'
   }
 
+  CATEGORIES[:SYMBOL_INFO] = SYMBOL_INFO
+
   VOLUME = {
     volume:                'v',
     ask_size:              'a5',
@@ -82,6 +94,8 @@ module YFAPI
     last_trade_size:       'k3',
     average_daily_volume:  'a2'
   }
+
+  CATEGORIES[:VOLUME] = VOLUME
 
   RATIOS = {
     earnings_per_share:                     'e',
@@ -99,6 +113,8 @@ module YFAPI
     price_slash_eps_estimate_next_year:     'r7',  
     short_ratio:                            's7'  
   }
+
+  CATEGORIES[:RATIOS] = RATIOS
 
   MISC = {
     days_value_change:               'w1',
@@ -120,6 +136,8 @@ module YFAPI
     holdings_value_realtime:         'v7',
     revenue:                         's6'
   }
+
+  CATEGORIES[:MISC] = MISC
 
   BASE_URL= "http://finance.yahoo.com/d/quotes.csv?s="
   DIVIDER = "&f="
