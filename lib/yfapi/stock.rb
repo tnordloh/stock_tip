@@ -6,17 +6,14 @@ module YFAPI
     YFAPI::CATEGORIES.each_value do |cat| 
       cat.each { |method,val| 
         define_method method do
-          unless @collected_data[val]
-            @collected_data[val] = @stock_info.field(@symbol,val)
-          end
-          #@collected_data[val]
+          @data[val] = @stock_info.field(@symbol,val) unless @data[val]
         end
       }
     end
 
     def initialize(symbol)
       @stock_info = YFAPI::StockInfo.new()
-      @collected_data = Hash.new
+      @data = Hash.new
       @symbol = symbol
     end
 
