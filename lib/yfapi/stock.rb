@@ -4,11 +4,11 @@ module YFAPI
   class Stock
 
     YFAPI::CATEGORIES.each_value do |cat| 
-      cat.each { |method,val| 
+      cat.each do |method,val| 
         define_method method do
           @data[val] = @stock_info.field(@symbol,val) unless @data[val]
         end
-      }
+      do
     end
 
     def initialize(symbol)
