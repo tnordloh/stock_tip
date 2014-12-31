@@ -2,6 +2,7 @@ module YFAPI
   require_relative 'stock_info'
   require_relative 'constants'
   class Stock
+
     YFAPI::CATEGORIES.each_value do |cat| 
       cat.each { |meth,val| 
         define_method meth do
@@ -13,10 +14,12 @@ module YFAPI
         end
       }
     end
+
     def initialize(symb)
       @stock_info = YFAPI::StockInfo.new()
       @collected_data = Hash.new
       @symbol = symb
     end
+
   end
 end
