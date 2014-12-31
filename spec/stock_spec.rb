@@ -7,5 +7,6 @@ describe YFAPI::Stock do
     stock =  YFAPI::Stock.new("GE")
     stock.symbol.must_equal("GE")
     stock.holdings_gain_percent.must_equal("- - -")
+    stock.symbol.must_equal("GE")
   end
 end

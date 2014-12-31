@@ -8,7 +8,7 @@ module YFAPI
         define_method method do
           @data[val] = @stock_info.field(@symbol,val) unless @data[val]
         end
-      do
+      end
     end
 
     def initialize(symbol)
