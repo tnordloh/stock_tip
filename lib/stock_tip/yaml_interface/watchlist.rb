@@ -31,6 +31,17 @@ module StockTip
       write
     end
 
+    def min_shares(symbol, buy_fee: 9.99)
+      p symbol
+      columns = []
+      columns << YFAPI::SYMBOL_INFO[:symbol]
+      columns << YFAPI::DIVIDENDS[:dividend_per_share] 
+      fields = @stock_info.get_stock(columns,symbol)
+      #buy_fee/fields[symbol][YFAPI::DIVIDENDS[:dividend_per_share]].to_f 
+      shares = buy_fee / fields[symbol][YFAPI::DIVIDENDS[:dividend_per_share]].to_f 
+      (shares*4).ceil
+    end
+
     def best_deal
       columns = []
       columns << YFAPI::SYMBOL_INFO[:symbol]
@@ -45,22 +56,30 @@ module StockTip
     end
 
     def to_s
-      header = %w[ SYMBOL ASK EX_DIVIDEND_DATE DIVIDEND_PER_SHARE]
-      printme = header.map {|col| col.ljust(16)}.join("|")
-      printme = "\n|" + printme + "\n"
+      header = %w[ SYMBOL ASK EX_DIVIDEND_DATE DIVIDEND_PER_SHARE YIELD]
+      width=19
+      printme = header.map {|col| col.ljust(width)}.join("| ")
+      printme = "\n| " + printme + "\n"
+      printme << "=" * (width * header.size ) + "\n"
       columns = []
       columns << YFAPI::SYMBOL_INFO[:symbol]
       columns << YFAPI::AVERAGES[:last_trade_price_only]
       columns << YFAPI::DIVIDENDS[:ex_dividend_date] 
       columns << YFAPI::DIVIDENDS[:dividend_per_share] 
-      width=15
+      columns << YFAPI::DIVIDENDS[:dividend_yield] 
+      deal = self.best_deal
+      shares = min_shares(deal)
       self.each {|symbol| 
         fields = @stock_info.get_stock(columns,symbol)
         outstring = columns.map() {|col| 
-          fields[symbol][col].ljust(16)
-        }.join("|")
-        printme << "|" + outstring + "\n"
+          fields[symbol][col].ljust(width)
+        }.join("| ")
+        printme << "| " + outstring + "\n"
       }
+      price = fields[symbol][YFAPI::AVERAGES[:last_trade_price_only]].to_f
+      printme << "best deal at this time, based on dividends, is #{deal}\n"
+      printme << "buy #{shares} shares for #{price*shares } to get your buy fee back "
+                 "at the next dividend payout\n"
       printme
     end
 

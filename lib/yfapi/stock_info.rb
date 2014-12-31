@@ -6,6 +6,13 @@ module YFAPI
 
     require_relative './constants'
 
+    BASE_URL= "http://finance.yahoo.com/d/quotes.csv?s="
+    ASK="l1"
+    DIVIDEND_PER_SHARE="d"
+    EX_DIVIDEND_DATE="q"
+    SYMBOL = "s"
+    DIVIDER = "&f="
+    TAIL = "&e=.csv"
 
     def price(stock_symbol)
       symbol = YFAPI::SYMBOL_INFO[:symbol]
@@ -21,14 +28,18 @@ module YFAPI
     end
 
     def dividend_info(stock_symbol)
-      symbol_key        = YFAPI::SYMBOL_INFO[:symbol]
-      ex_div_key        = YFAPI::DIVIDENDS[:ex_dividend_date]
-      div_per_share_key = YFAPI::DIVIDENDS[:dividend_per_share]
-      fields            = [symbol_key,ex_div_key,div_per_share_key]
-      data              = get_stock(fields, stock_symbol)
-      cents = (data[stock_symbol][div_per_share_key].to_f * 100).to_i
-      date  = Date.parse(data[stock_symbol][ex_div_key])
-      { div_per_share_key => cents/4, ex_div_key => date }
+      fields = [SYMBOL,EX_DIVIDEND_DATE,DIVIDEND_PER_SHARE]
+      data = get_stock(fields, stock_symbol)
+      cents = (data[stock_symbol][DIVIDEND_PER_SHARE].to_f * 100).to_i
+      date = Date.parse(data[stock_symbol][EX_DIVIDEND_DATE])
+      return { DIVIDEND_PER_SHARE => cents/4, 
+               EX_DIVIDEND_DATE   => date
+             }
+    end
+
+    def field(symbol, row)
+      data = get_stock [row],symbol
+      data.first[0]
     end
 
     def get_stock(rows,name)

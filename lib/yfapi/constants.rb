@@ -7,7 +7,9 @@ module YFAPI
   def self.dollars_to_cents(dollars)
     (dollars.round(2)*100).to_i
   end
+
   CATEGORIES = {}
+
   PRICING = {
     ask:                        'a',
     bid:                        'b',

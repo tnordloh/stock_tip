@@ -27,4 +27,12 @@ describe StockTip::WatchList do
     watch_list.add("GE")
     p watch_list.best_deal 
   end
+
+  it "calculates the minimum shares to by to recoup buy fee in dividends" do
+    watch_list = StockTip::WatchList.new('./data/test')
+    watch_list.add("MCD")
+    watch_list.add("GE")
+    p watch_list.min_shares(watch_list.best_deal)
+  end
+
 end
