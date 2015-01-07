@@ -30,10 +30,29 @@ describe StockTip::Portfolio do
                                   :sell_fee => 1002 } )
     portfolio = StockTip::Portfolio.new("./data/test")
     portfolio.load_account(account)
-    portfolio.add_stock("MCD",100.00,100,9.99,"2014-9-9") 
-    portfolio.add_stock("GE",100.00,100,9.99,"2014-9-9") 
+    portfolio.push("MCD",100.00,100,9.99,"2014-9-9") 
+    portfolio.push("GE",100.00,100,9.99,"2014-9-9") 
     portfolio.sell_value.must_be_within_delta(11_531_02,1_000_00)
+    File.delete(account.config_file)
+    File.delete(portfolio.config_file)
   end
 
+
+  it "adds multiple entries to the portfolio" do
+    account = StockTip::AccountInfo.new("./data/test")
+    account.write(info: { :name => "Ameritrade", 
+                                  :buy_fee => 999,
+                                  :sell_fee => 1002 } )
+    portfolio = StockTip::Portfolio.new("./data/test")
+    portfolio.load_account(account)
+    portfolio.push("MCD",100.00,100,9.99,"2014-9-9") 
+    portfolio.push("GE",100.00,100,9.99,"2014-9-9") 
+    portfolio.info.select {|stock| stock.symbol == "GE"}.size.must_equal(1)
+    portfolio.reject!("GE") 
+    portfolio.info.select {|stock| stock.symbol == "GE"}.size.must_equal(0)
+    portfolio.reject!("MCD")
+    File.delete(account.config_file)
+    File.delete(portfolio.config_file)
+  end
 
 end

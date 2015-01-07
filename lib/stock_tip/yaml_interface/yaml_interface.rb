@@ -12,7 +12,7 @@ module StockTip
 
     attr_reader :config_file, :info, :directory
 
-    def exists?
+    def has_data?
       File.exists?(@config_file)
     end
 
@@ -21,10 +21,9 @@ module StockTip
     end
 
     def read_config_file
-      unless exists?
-        raise "file #{config_file} nonexistent.  use create_account to create"
+      if self.has_data?
+        @info = YAML.load_file(@config_file)
       end
-      @info = YAML.load_file(@config_file)
     end
 
     def write(info: @info )

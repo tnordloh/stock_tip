@@ -5,20 +5,12 @@ require_relative '../lib/yaml_interface'
 require_relative '../lib/stock_tip/cli/menu'
 default_directory = ARGV[0] ||"./data/current"
 
-menu = StockTip::CLI::Menu.new
-account = StockTip::AccountInfo.new(default_directory)
-unless account.exists?
-  puts "I don't see an account in #{default_directory}, let me prompt you "+
-    "to create one"
-  menu.create_account(account)
-end
+menu = StockTip::CLI::Menu.new(default_directory: default_directory)
 
-account.read_config_file
 
 portfolio = StockTip::Portfolio.new(default_directory)
-portfolio.load_account(account)
 
-unless portfolio.exists?
+unless portfolio.has_data?
   puts "I don't see a portfolio in #{default_directory}, let me prompt you "+
     "to create one"
   menu.add_stock(portfolio)

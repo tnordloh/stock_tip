@@ -8,20 +8,21 @@ module StockTip
     PORTFOLIO_FILE="portfolio.yaml"
     def initialize(directory)
       super(directory,PORTFOLIO_FILE)
-      @info = []
       @account_info = nil
+      @info = []
+      self.read_config_file
       @stock_info = YFAPI::StockInfo.new()
     end
     
-    attr_reader :account_info
+    attr_reader :account_info, :info
 
-    def add_stock(symbol,price_per_share,shares,buy_fee,purchase_date)
+    def push(symbol,price_per_share,shares,buy_fee,purchase_date)
       @info << StockTip::OwnedStock.new(symbol,price_per_share,shares,
                                             buy_fee, purchase_date)
       self.write
     end
 
-    def delete(symbol)
+    def reject!(symbol)
       @info.reject! { |stock| stock.symbol == symbol }
       self.write
     end

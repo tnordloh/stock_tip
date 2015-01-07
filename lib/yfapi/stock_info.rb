@@ -3,6 +3,7 @@ module YFAPI
     require 'open-uri'
     require 'csv'
     require 'date'
+    require 'uri'
 
     require_relative './constants'
 
@@ -21,8 +22,9 @@ module YFAPI
                       price
                      ]
       stock = get_stock(price_fields, stock_symbol)
-      return nil if stock["Missing Symbols List."] 
-      return nil if stock[stock_symbol] == nil
+      return nil if !stock || 
+                    stock["Missing Symbols List."] ||
+                    !stock[stock_symbol]
       dollar_value = stock[stock_symbol][price].to_f 
       YFAPI.dollars_to_cents(dollar_value) 
     end
@@ -44,8 +46,13 @@ module YFAPI
 
     def get_stock(rows,name)
       parsed_rows = rows.join()
-      query = BASE_URL + name + DIVIDER + parsed_rows + TAIL
-      csv_data = open(query) { |line| CSV.parse(line.read) }       
+      query = URI.escape(BASE_URL + name + DIVIDER + parsed_rows + TAIL)
+      begin
+        csv_data = open(query) { |line| CSV.parse(line.read) }       
+      rescue Exception => e
+        puts "failure: #{e}"
+        return nil
+      end
       csv_data.inject({}) do |accumulator,line|
         accumulator[line[0]] = rows.zip(line).to_h 
         accumulator

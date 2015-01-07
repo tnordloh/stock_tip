@@ -1,21 +1,35 @@
 module StockTip
 
-  require 'highline/import'
+  require 'highline'
   require_relative '../../yfapi/stock_info'
+  require_relative '../../yaml_interface'
 
   module CLI
     TEST = lambda { say "howdy" }
     class Menu
-      def initialize()
+      def initialize(default_directory: nil, input: STDIN, output: STDOUT)
         @stock_info = YFAPI::StockInfo.new()
+        @highline= HighLine.new(input,output)
+        @default_directory = default_directory
+        self.account 
       end
+
+      def account
+        @account = StockTip::AccountInfo.new(@default_directory)
+        unless @account.has_data?
+          highline.say "I don't see an account in #{default_directory}," + 
+            " let me prompt you to create one"
+          self.create_account(@account)
+        end
+      end
+
       def main_menu(list: TEST , summary: TEST, 
                     portfolio: nil, watchlist: nil)
         choices = %w{watchlist portfolio quit}
         quit = false
         while quit == false
-          choose do |menu|
-            say "main menu"
+          @highline.choose do |menu|
+            @highline.say "main menu"
             menu.index        = :letter
             menu.index_suffix = ") "
             menu.prompt       = "choice:"
@@ -23,7 +37,7 @@ module StockTip
               watch_list(watchlist); 
             end
             menu.choice :portfolio do 
-              summary(portfolio)
+              portfolio(portfolio)
             end
             menu.choice :quit do 
               quit = true 
@@ -33,37 +47,38 @@ module StockTip
       end
 
       def add_stock(portfolio)
-        symbol = get_symbol() 
+        symbol = self.symbol() 
         price_per_share = ask("price per share?")
-        buy_fee = ask("buy fee? [#{portfolio.account_info[:buy_fee]}]")
+        buy_fee = @highline.ask("buy fee? [#{portfolio.account_info[:buy_fee]}]")
         p buy_fee
         p buy_fee.to_s.respond_to?(:to_f)
         buy_fee = portfolio.account_info[:buy_fee]  unless (buy_fee.to_f > 0.0)
         p buy_fee
-        shares = ask("number of shares?")
-        purchase_date = get_date
-        portfolio.add_stock(symbol,
+        shares = @highline.ask("number of shares?")
+        purchase_date = self.date
+        portfolio.push(symbol,
                             price_per_share.to_f,
                             shares.to_i,
                             buy_fee.to_f,
                             purchase_date)
       end
 
-      def get_date
-        purchase_date = ask("purchase date?")
+      def date
+        purchase_date = @highline.ask("purchase date?")
         while purchase_date !~ /\d{4}-\d{1,2}-\d{1,2}/
-          say "purchase date should be formatted like '2014-1-1'"
-          purchase_date = ask("purchase date?")
+          @highline.say "purchase date should be formatted like '2014-1-1'"
+          purchase_date = @highline.ask("purchase date?")
         end
         purchase_date
       end
 
-      def get_symbol()
-        symbol = nil
-        while(symbol == nil)
-          symbol = ask("stock symbol?")
-          if @stock_info.price(symbol) == nil
-            say "symbol #{symbol} not found. Reprompting:" 
+      def symbol()
+        try_this_symbol = nil
+        while(try_this_symbol == nil)
+          symbol = @highline.ask("stock symbol?")
+          if symbol == nil || @stock_info.price(symbol) == nil
+            @highline.say "symbol #{symbol} not found. Reprompting:" 
+            try_this_symbol = nil
           else
             return symbol
           end
@@ -73,53 +88,51 @@ module StockTip
 
       def create_account(account)
         account_info = {}
-        account_info[:broker]   = ask("broker name?")
-        account_info[:sell_fee] = ask("sell fee?")
-        account_info[:buy_fee]  = ask("buy fee?")
-        puts "creating account"
+        account_info[:broker]   = @highline.ask("broker name?")
+        account_info[:sell_fee] = @highline.ask("sell fee?")
+        account_info[:buy_fee]  = @highline.ask("buy fee?")
+        @highline.say "creating account"
         account.write(info: account_info)
       end
 
-      def summary(portfolio)
+      def portfolio(portfolio)
         action = ""
         until (action =~ /quit|q/i )
+          @highline.say "your portfolio"
           stocks = portfolio.info
           column_width=14
           columns = %w[symbol shares price/share broker_fee total_price sell_value 
                  current_price ]
           header = columns.map { |c| c.to_s.ljust(column_width) }.join('|')
           spacer = "#{"-" * (columns.size * column_width + columns.size)}"
-          say spacer
-          say "#{header}\n"
-          say spacer
+          @highline.say spacer
+          @highline.say "#{header}\n"
+          @highline.say spacer
           stocks.each do |stock|
             printme = stock.to_s(column_width)
-            say "#{printme}\n"
+            @highline.say "#{printme}\n"
           end
-          say "actions:"
-          say "  [a] to add a stock to the portfolio"
-          say "  [d] to delete a symbol"
-          say "  [q] or [quit] to quit to previous menu"
-          say "  [enter] to refresh"
-          action = ask "action?"
-          add_stock(portfolio) if action == "a"
-          portfolio.delete(get_symbol()) if action == "d"
+          @highline.say "actions:"
+          @highline.say "  [a] to add a stock to the portfolio"
+          @highline.say "  [d] to delete a symbol"
+          @highline.say "  [q] or [quit] to quit to previous menu"
+          @highline.say "  [enter] to refresh"
+          action = @highline.ask "action?"
+          self.add_stock(portfolio) if action == "a"
+          portfolio.reject!(self.symbol()) if action == "d"
         end
-      end
-
-      def delete_stock
       end
 
       def watch_list(watchlist)
         symbol = ""
         watchlist.read_config_file
         until (symbol =~ /quit|q/i )
-          say watchlist.to_s
-          say "actions:"
-          say "  [a symbol] to add a symbol to the watchlist"
-          say "  [d symbol] to delete a symbol"
-          say "  [r] to refresh"
-          say "  [q] or [quit]] to quit to previous menu"
+          @highline.say watchlist.to_s
+          @highline.say "actions:"
+          @highline.say "  [a symbol] to add a symbol to the watchlist"
+          @highline.say "  [d symbol] to delete a symbol"
+          @highline.say "  [r] to refresh"
+          @highline.say "  [q] or [quit]] to quit to previous menu"
           symbol = ask "actions?"
           command,option = symbol.split(/\s+/)
           edit_fields(watchlist) if command == "f"
