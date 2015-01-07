@@ -7,6 +7,7 @@ module YFAPI
       cat.each do |method,val| 
         define_method method do
           @data[val] = @stock_info.field(@symbol,val) unless @data[val]
+          @data[val]
         end
       end
     end
@@ -15,6 +16,10 @@ module YFAPI
       @stock_info = YFAPI::StockInfo.new()
       @data = Hash.new
       @symbol = symbol
+    end
+
+    def exists?
+      self.symbol == @symbol
     end
 
   end

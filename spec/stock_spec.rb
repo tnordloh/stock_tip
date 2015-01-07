@@ -9,4 +9,9 @@ describe YFAPI::Stock do
     stock.holdings_gain_percent.must_equal("- - -")
     stock.symbol.must_equal("GE")
   end
+
+  it "checks if a stock exists" do
+    stock = YFAPI::Stock.new("GE")
+    stock.exists?.must_equal(true)
+  end
 end

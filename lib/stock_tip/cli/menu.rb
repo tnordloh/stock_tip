@@ -11,7 +11,7 @@ module StockTip
       end
       def main_menu(list: TEST , summary: TEST, 
                     portfolio: nil, watchlist: nil)
-        choices = %w{watchlist summary quit add_stock}
+        choices = %w{watchlist portfolio quit}
         quit = false
         while quit == false
           choose do |menu|
@@ -22,16 +22,8 @@ module StockTip
             menu.choice :watchlist do 
               watch_list(watchlist); 
             end
-            menu.choice :summary do 
+            menu.choice :portfolio do 
               summary(portfolio)
-              puts "press enter to continue"
-              gets 
-            end
-            menu.choice :add_stock do 
-              add_stock(portfolio) 
-              summary.call
-              puts "press enter to continue"
-              gets 
             end
             menu.choice :quit do 
               quit = true 
@@ -55,7 +47,6 @@ module StockTip
                             shares.to_i,
                             buy_fee.to_f,
                             purchase_date)
-        portfolio.write
       end
 
       def get_date
@@ -90,19 +81,33 @@ module StockTip
       end
 
       def summary(portfolio)
-        stocks = portfolio.info
-        column_width=14
-        columns = %w[symbol shares price/share broker_fee total_price sell_value 
-               current_price ]
-        header = columns.map { |c| c.to_s.ljust(column_width) }.join('|')
-        spacer = "#{"-" * (columns.size * column_width + columns.size)}"
-        say spacer
-        say "#{header}\n"
-        say spacer
-        stocks.each do |stock|
-          printme = stock.to_s(column_width)
-          say "#{printme}\n"
+        action = ""
+        until (action =~ /quit|q/i )
+          stocks = portfolio.info
+          column_width=14
+          columns = %w[symbol shares price/share broker_fee total_price sell_value 
+                 current_price ]
+          header = columns.map { |c| c.to_s.ljust(column_width) }.join('|')
+          spacer = "#{"-" * (columns.size * column_width + columns.size)}"
+          say spacer
+          say "#{header}\n"
+          say spacer
+          stocks.each do |stock|
+            printme = stock.to_s(column_width)
+            say "#{printme}\n"
+          end
+          say "actions:"
+          say "  [a] to add a stock to the portfolio"
+          say "  [d] to delete a symbol"
+          say "  [q] or [quit] to quit to previous menu"
+          say "  [enter] to refresh"
+          action = ask "action?"
+          add_stock(portfolio) if action == "a"
+          portfolio.delete(get_symbol()) if action == "d"
         end
+      end
+
+      def delete_stock
       end
 
       def watch_list(watchlist)

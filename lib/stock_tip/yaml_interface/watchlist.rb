@@ -2,6 +2,7 @@ module StockTip
   require_relative 'yaml_interface'
   require_relative 'watch_list_format'
   require_relative '../../yfapi/stock_info'
+  require_relative '../../yfapi/stock'
   require_relative '../../yfapi/constants'
   class WatchList < StockTip::YamlInterface
     
@@ -32,13 +33,9 @@ module StockTip
     end
 
     def min_shares(symbol, buy_fee: 9.99)
-      p symbol
+      stock = YFAPI::Stock.new(symbol)
       columns = []
-      columns << YFAPI::SYMBOL_INFO[:symbol]
-      columns << YFAPI::DIVIDENDS[:dividend_per_share] 
-      fields = @stock_info.get_stock(columns,symbol)
-      #buy_fee/fields[symbol][YFAPI::DIVIDENDS[:dividend_per_share]].to_f 
-      shares = buy_fee / fields[symbol][YFAPI::DIVIDENDS[:dividend_per_share]].to_f 
+      shares = buy_fee / stock.dividend_per_share.to_f
       (shares*4).ceil
     end
 
@@ -48,9 +45,9 @@ module StockTip
       columns << YFAPI::AVERAGES[:last_trade_price_only]
       columns << YFAPI::DIVIDENDS[:dividend_per_share] 
       self.max_by do |symbol|
-        fields = @stock_info.get_stock(columns,symbol)
-        div =  fields[symbol][YFAPI::DIVIDENDS[:dividend_per_share]].to_f
-        price =  fields[symbol][YFAPI::AVERAGES[:last_trade_price_only]].to_f
+        stock = YFAPI::Stock.new(symbol)
+        div =  stock.dividend_per_share.to_f
+        price =  stock.last_trade_price_only.to_f
         div/price
       end
     end
@@ -76,9 +73,10 @@ module StockTip
         }.join("| ")
         printme << "| " + outstring + "\n"
       }
-      price = fields[symbol][YFAPI::AVERAGES[:last_trade_price_only]].to_f
+      price = YFAPI::Stock.new(deal).last_trade_price_only.to_f
       printme << "best deal at this time, based on dividends, is #{deal}\n"
-      printme << "buy #{shares} shares for #{price*shares } to get your buy fee back "
+      printme << "buy #{shares} shares for #{price*shares } "+
+                 "to get your buy fee back " +
                  "at the next dividend payout\n"
       printme
     end

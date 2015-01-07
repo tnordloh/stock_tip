@@ -18,6 +18,12 @@ module StockTip
     def add_stock(symbol,price_per_share,shares,buy_fee,purchase_date)
       @info << StockTip::OwnedStock.new(symbol,price_per_share,shares,
                                             buy_fee, purchase_date)
+      self.write
+    end
+
+    def delete(symbol)
+      @info.reject! { |stock| stock.symbol == symbol }
+      self.write
     end
 
     def load_account(account)
