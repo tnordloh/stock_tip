@@ -49,18 +49,18 @@ module StockTip
     end
 
     def to_s
-      header = %w{symbol ask ex_dividend_date dividend_per_share dividend_yield}
-      width=19
-      printme = header.map {|col| col.ljust(width)}.join("| ")
+      header = %i(symbol last_trade_price_only ex_dividend_date dividend_per_share dividend_yield)
+      width=21
+      printme = header.map {|col| col.to_s.ljust(width)}.join("| ")
       printme = "\n| " + printme + "\n"
       printme << "=" * (width * header.size ) + "\n"
       deal = self.best_deal
       shares = min_shares(deal)
       self.each {|symbol| 
         stock = YFAPI::Stock.new(symbol)
-        stock.bulk_fetch(header[1..-1])
+        stock.bulk_fetch(header)
         outstring = header.map() {|col| 
-          stock.send(col).ljust(width)
+          stock.send(col).to_s.ljust(width)
         }.join("| ")
         printme << "| " + outstring + "\n"
       }

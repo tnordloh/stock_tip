@@ -18,8 +18,8 @@ module YFAPI
 
     def bulk_fetch(*list)
       list.unshift :symbol
-      sendme = list.map { |item| YFAPI::ALL_FIELDS[item] }
-      fields = @stock_info.get_stock(list,@symbol)
+      sendme = list.map { |item| YFAPI::ALL_FIELDS[item] }.flatten!
+      fields = @stock_info.get_stock(list.flatten!,@symbol)
       list.each do |field| 
         @data[field] = fields[@symbol][field]
       end

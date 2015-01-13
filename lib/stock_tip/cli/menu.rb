@@ -72,7 +72,7 @@ module StockTip
       end
 
       def main_menu
-        load_account if @account = nil
+        load_account if @account == nil
         choices = %w{watchlist portfolio}
         quit = false
         while quit == false
@@ -177,7 +177,8 @@ module StockTip
         unless @account.has_data?
           @highline.say "I don't see an account in #{@default_directory}," + 
             " let me prompt you to create one"
-          @account.write(info = self.create_account)
+          account = self.create_account
+          @account.write(info: account)
         end
         load_portfolio
         @portfolio.load_account(@account)

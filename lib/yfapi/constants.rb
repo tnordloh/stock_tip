@@ -9,11 +9,11 @@ module YFAPI
   end
 
   TO_F = lambda { |x| 
-    return nil if x == "N/A"
+    return x if x == "N/A"
     x.to_f
   }
   TO_F_TO_CENTS = lambda { |x| 
-    return nil if x == "N/A"
+    return x if x == "N/A"
     self.dollars_to_cents(x.to_f) 
   }
 

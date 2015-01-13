@@ -15,8 +15,7 @@ module YFAPI
     end
 
     def get_stock(rows,name)
-      parsed_rows = rows.map {|row| YFAPI::ALL_FIELDS[row].value}
-      parsed_rows = parsed_rows.join()
+      parsed_rows = rows.map {|row| YFAPI::ALL_FIELDS[row].value}.join
       query = URI.escape(BASE_URL + name + DIVIDER + parsed_rows + TAIL)
       begin
         csv_data = open(query) { |line| CSV.parse(line.read) }       
@@ -24,9 +23,7 @@ module YFAPI
         puts "failure: in #{__method__}, #{e}"
         return nil
       end
-      if csv_data[0][0] =~ /Missing/
-        return nil
-      end
+      return nil if csv_data[0][0] =~ /Missing/
       csv_data.inject({}) do |accumulator,line|
         accumulator[line[0]] = rows.zip(line).to_h 
         accumulator
