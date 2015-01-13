@@ -29,6 +29,7 @@ module StockTip
     def write(info: @info )
       FileUtils::mkdir_p @directory unless Dir.exists?(@directory)
       File.open(@config_file, "w") {|f| f.write info.to_yaml } 
+      @info = info
     end
 
   end

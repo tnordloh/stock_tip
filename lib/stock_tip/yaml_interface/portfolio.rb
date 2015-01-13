@@ -11,7 +11,6 @@ module StockTip
       @account_info = nil
       @info = []
       self.read_config_file
-      @stock_info = YFAPI::StockInfo.new()
     end
     
     attr_reader :account_info, :info

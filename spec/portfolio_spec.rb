@@ -8,7 +8,7 @@ describe StockTip::Portfolio do
 
   it "checks if your broker information exists already" do
     empty_portfolio = StockTip::Portfolio.new("./data/empty")
-    empty_portfolio.exists?.must_equal(false)
+    empty_portfolio.has_data?.must_equal(false)
   end
   
   it "creates a new portfolio" do
@@ -16,7 +16,7 @@ describe StockTip::Portfolio do
     portfolio.write(info: { :name => "Ameritrade", 
                                   :buy_fee => 999,
                                   :sell_fee => 1002 } )
-    portfolio.exists?.must_equal(true)
+    portfolio.has_data?.must_equal(true)
     account2 = StockTip::Portfolio.new("./data/test")
     account2.read_config_file
     account2.read_config_file[:name].must_equal('Ameritrade')

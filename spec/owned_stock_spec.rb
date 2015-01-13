@@ -35,7 +35,8 @@ describe StockTip::OwnedStock do
   end
 
   it "can get turn a stock into a string" do
-    stock.to_s.index("MCD").must_equal(0)
+    p stock.to_s.index("MCD").must_equal(0)
+    p stock.to_s
   end
   
   it "can determine how many days a stock has been owned" do

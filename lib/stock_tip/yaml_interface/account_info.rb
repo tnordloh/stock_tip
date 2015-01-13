@@ -6,6 +6,7 @@ module StockTip
 
     def initialize(directory)
       super(directory,ACCOUNT_FILE)
+      self.read_config_file
     end
 
   end

@@ -47,7 +47,7 @@ describe StockTip::CLI do
     end
     @input << "test\ntest2\ntest3\n"
     @input.rewind
-    @cli.create_account(DummyAccount.new(1)).must_equal(true)
+    @cli.create_account()[:sell_fee].must_equal("test2")
   end
 
 

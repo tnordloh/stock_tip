@@ -3,7 +3,6 @@ module StockTip
   require 'date'
 
   require_relative '../yfapi'
-  require_relative '../yfapi'
 
   class OwnedStock
     def initialize(symbol,price_per_share,shares,broker_fee,purchase_date)
@@ -12,7 +11,7 @@ module StockTip
       @shares          = shares
       @broker_fee      = YFAPI.dollars_to_cents(broker_fee)
       @purchase_date   = Date.parse(purchase_date)
-      @stock_info      = YFAPI::StockInfo.new()
+      @stock           = YFAPI::Stock.new(@symbol)
     end
 
     attr_reader :shares, :symbol, :purchase_date, :broker_fee, 
@@ -27,7 +26,8 @@ module StockTip
     end
 
     def current_price()
-      @stock_info.price(@symbol)
+      price = @stock.last_trade_price_only().to_f
+      YFAPI::dollars_to_cents(price)
     end
 
     def self.sum( *owned_stocks, this_method: :total_purchase_price )

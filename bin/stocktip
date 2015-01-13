@@ -7,43 +7,6 @@ default_directory = ARGV[0] ||"./data/current"
 
 menu = StockTip::CLI::Menu.new(default_directory: default_directory)
 
-
-portfolio = StockTip::Portfolio.new(default_directory)
-
-unless portfolio.has_data?
-  puts "I don't see a portfolio in #{default_directory}, let me prompt you "+
-    "to create one"
-  menu.add_stock(portfolio)
-else
-  portfolio.read_config_file
-end
-
-
-summary = lambda do
-  stocks = portfolio.info
-  column_width=14
-
-  columns = %w[symbol shares price/share broker_fee total_price sell_value 
-               current_price ]
-  header = columns.map { |c| c.to_s.ljust(column_width) }.join('|')
-  spacer = "#{"-" * (columns.size * column_width + columns.size)}"
-  say spacer
-  say "#{header}\n"
-  say spacer
-  stocks.each { |stock|
-    printme = stock.to_s(column_width)
-    say "#{printme}\n"
-  }
-end
-
-list = lambda do 
-  say "this will one day allow the user to list features of a stock that"
-  say "are particular to <%= color('their', BOLD) %> needs"
-end
-
-watchlist = StockTip::WatchList.new(default_directory)
-
-menu.main_menu(list: list, summary: summary, portfolio: portfolio, 
-               watchlist: watchlist)
+menu.main_menu()
 
 
